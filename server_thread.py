@@ -40,6 +40,7 @@ class ProcessTheClient(threading.Thread):
 class Server(threading.Thread):
 	def __init__(self):
 		self.the_clients = []
+		self.client_num = 0
 		self.my_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		threading.Thread.__init__(self)
 
@@ -50,7 +51,8 @@ class Server(threading.Thread):
 		while True:
 			self.connection, self.client_address = self.my_socket.accept()
 			logging.warning(f"connection from {self.client_address}")
-			
+			self.client_num += 1
+			logging.warning(f"serving {self.client_num} client(s)")
 			clt = ProcessTheClient(self.connection, self.client_address)
 			clt.start()
 			self.the_clients.append(clt)
